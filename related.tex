@@ -1,0 +1,120 @@
+\section{Related Work}
+\label{sec:related}
+
+\nparagraph{Measuring path changes.}  Several previous studies have
+introduced new path measurement techniques~\cite{as-relationships,
+shaikh:nsdi04, hubble, iplane, planetseer, oliveira09exploration,
+revtr}, \eg to discover inter-AS links, quantify BGP path exploration,
+or infer an AS's path preferences.  Our system combines multiple sources
+of data to collect Internet path measurements, including public
+BGP feeds~\cite{routeviews} and traceroute measurements collected from
+PlanetLab.  
+\begin{comment}
+Less widespread is our use of Reverse
+Traceroute~\cite{revtr} to collect path measurements from arbitrary ASes
+back to monitored prefixes.  Reverse Traceroute sends IP Record Route
+probes to a target router from distributed vantage points spoofing as
+the source, so that the source receives a sequence of routers on the
+path back from the target router to itself.  Even though Reverse
+Traceroute does not work on paths that filter IP Record Route probes or
+spoofed packets, it helps us cover ASes invisible from BGP feeds or
+traceroutes. 
+\end{comment}
+Previous work has used BGP poisoning to quantify the use
+of default routes in the Internet~\cite{optometry}.  We use BGP
+poisoning to perform topology discovery in a way equivalent to that of
+Colitti \emph{et al.}~\cite{lorenzo-thesis}.  However, ours is the first
+work we are aware of that uses BGP poisoning to obtain ground truth for
+evaluating root cause analysis in the Internet.  
+
+% We also use poisoning to aid in the inference of path preference in
+% the Internet, similar to how Oliveira \emph{et al.}~inferred path
+% preference from the sequence of updates during the BGP convergence
+% process~\cite{oliveira09exploration}.  
+
+% In the future, we plan to other work on inferring path preference into
+% our system~\cite{oliveira09exploration, as-relationships} and further
+% explore the use of BGP poisoning for path preference inference.  We
+% note that our system does not, but could, use data collected from
+% intra-AS routing protocols such as OSPF and
+% IS-IS~\cite{shaikh:nsdi04}.  Intra-AS protocol information would be
+% useful for more fine-grained root cause identification.  One challenge
+% is that ASes are unwilling to share routing information; existing
+% approaches that use intra-AS routing information are limited to a
+% single network~\cite{ipapproach, netdiagnoser}, but our goal is to
+% identify the root cause of path changes in the wide-area Internet.  
+
+\nparagraph{Impact of path changes.} Several previous studies highlight
+the impact of route
+changes~\cite{labovitz00,feamster,beacons,feamster07,ratul}, \eg causing
+increased delays and transient packet loss due to convergence, in
+addition to outages due to misconfiguration. In this work, we identify
+the root cause of such pathological changes, which can assist in
+debugging and correcting the problem. Previous work also studied how
+paths propagate in the Internet~\cite{griffin-wilfgong-sheperd,wedgies}.
+Our work uses a basic routing model to understand how interdomain path changes
+propagate, building on previous work that models the
+BGP decision process~\cite{gao}.  
+
+\nparagraph{Root cause analysis.} As described in
+\S\ref{sec:challenges}, the work by Feldmann \emph{et
+al.}~\cite{feldman} and Caesar \emph{et al.}~\cite{caesar} are most
+closely related to ours. We demonstrated that the \feldmann assumption
+prevents their approaches from achieving both accuracy and precision.
+Several other papers have looked at the problem of root cause analysis
+from different perspectives.  Wu et al.~\cite{needle} propose a system
+to identify high-impact network events affecting an AS, using routing
+changes observed at an AS's border routers and correlating it with
+traffic changes.  The system helps operators identify important events,
+but is limited to one network and cannot identify the cause of events.
+In particular, if an event is caused by a distant AS, their system can
+only indicate the border routers involved. Pei et al.~\cite{BGP-RCN}
+propose a modification to BGP that includes information about the
+networks responsible for a path change. Our work demonstrates that one
+can identify root causes without requiring protocol modification.
+LIFEGUARD~\cite{lifeguard} and NetDiagnoser~\cite{netdiagnoser}
+identified a set of routers responsible for packet-forwarding outages,
+but did not focus on which network's path change (if any) caused the
+outage.  
+
+
+
+
+%\begin{itemize}
+%\item \cite{feldman} uses AS level information; is passive; assumes
+%  problems either on the old path or the new path.
+%
+%\item \cite{caesar, caesar-root-cause} similar to \cite{feldman}.  Correlation over time
+%  and across destinations.
+%
+%\item \cite{planetseer} is a passive + active monitoring technique for
+%  path changes, but does not provide root cause information.
+%
+%\item \cite{hubble} focuses on reachability problems, provides
+%  rudimentary root cause information.
+%
+%\item \cite{iplane} monitors routing data over time but does not
+%  analyze path changes across time.
+%
+%\item \cite{teixeira} discusses a measurement framework that could
+%  help with root-cause information.
+%
+%\item \cite{BGP-RCN} augments BGP with root cause information.
+%
+%\item Wu et al.~\cite{needle} propose a system to identify high-impact
+%network events affecting an AS.  They aggregate path changes observed
+%from an AS's border routers into network events using characteristics of
+%the observed changes (e.g., whether the router changed to a more or less
+%preferred route).  They also use per-prefix traffic measurement at
+%external links to compute how much traffic changed routes due to the
+%event and estimate its impact.  The system helps operators identify
+%important events, but is limited to one network and cannot identify the
+%cause of events.  In particular, if an event is caused by a distant AS,
+%their system can only indicate the border routers involved.
+%
+%\item Other refs: \cite{netdiagnoser}, \cite{feamster},
+%  \cite{labovitz00}, \cite{ratul}, \cite{beacons}, \cite{darkspaces},
+%  \cite{shaikh:nsdi04}, \cite{ipapproach,kompella-infocom},
+%  \cite{feamster07}. 
+%
+%\end{itemize}

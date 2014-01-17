@@ -1,0 +1,16 @@
+\section{Conclusion}
+\label{sec:conclusion}
+
+In this paper, we described an algorithm and a scalable system, \ouralgo, for accurately and precisely 
+identifying the network responsible for Internet path changes, even in the face of 
+induced path changes and incomplete information. We developed a general algorithm for identifying the root 
+cause of path changes, then used simple, validated assumptions about routing behavior 
+to derive new constraints on the networks that can possibly be responsible for a path change. 
+We then designed a system to gather the requisite path information and produced an 
+algorithm that identifies the root cause of a path change even with missing measurements. Finally, 
+we evaluated \ouralgo using ground truth from path changes induced on real Internet 
+paths, empirically informed simulations and natural path changes ``in the wild.'' We showed 
+that previous approaches to root cause analysis can either be accurate or precise, while our 
+approach achieves both. As part of our future work, we are investigating ways to use 
+this root cause information to automatically address routing changes that negatively impact 
+performance.

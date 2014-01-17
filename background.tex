@@ -1,0 +1,113 @@
+\section{Background}
+\label{sec:bg}
+In this paper, we focus on the problem of identifying the AS 
+responsible when an interdomain path change impacts 
+network connectivity or performance. Previous work focuses 
+on complementary problems such as detecting path 
+changes~\cite{feamster,beacons}, identifying long-lasting network and performance problems~\cite{hubble,planetseer,netdiagnoser,news} 
+and finding alternative paths that avoid these problems~\cite{ron,lifeguard}. 
+Instead of simply avoiding a problem when it occurs, our goal is to 
+provide salient information about its root cause so as to reduce time to repair.
+
+\subsection{Previous Work}
+
+A number of assumptions underly this simple algorithm, and the authors 
+present heuristics to cope with some cases where the assumptions are 
+violated. With these heuristics in place, they were able to isolate the origin 
+of a BGP path change to a single AS or interdomain link for 96\% of 
+the cases they study. While these results may suggest that we can close 
+the book on root cause analysis, the following section discusses 
+several limitations that motivate us to reopen it.
+  
+\subsection{Limitations}
+
+The algorithm and methodology proposed by Feldmann et al. 
+can in many cases correctly identify a narrow region of the network 
+that could have caused a BGP path change. However, several 
+limitations significantly limit the accuracy and coverage of their 
+approach. We now discuss these limitations and how we address 
+them in our work.
+
+\textbf{Simplifying assumptions.} Two key assumptions in 
+previous work is that all Internet paths are valley free and 
+that shortest paths are always preferred over longer ones. 
+While it is well known that these assumptions are violated in 
+practice it is difficult to determine \emph{when} and \emph{where} 
+they are violated. In this work, we announce paths that allow 
+us to determine the next-hop routing preferences for an AS toward 
+a prefix we control. We then incorporate this empirical information 
+in our root cause analysis algorithm. \tbd{Add results showing 
+this is the case}
+
+\textbf{Induced path changes.} \label{sec:induced}Another key assumption in 
+previous work is that the origin of a path change appears 
+either in the old path or the path. This assumption is false 
+in general, leading to so-called induced path changes 
+where the origin of path change is in neither the old path 
+nor the new path. \tbd{Add a simple example.} Previous work ignores such cases; in this work 
+we not only account for such cases when performing root 
+cause analysis, we also perform the additional measurements 
+required to identify the root cause when these cases occur. 
+\ekb{I don't think this is a fair characterization of previous work. Feldmann's
+paper specifically points out induced path changes in Figure 3(d) and has a
+section labeled ``Caution regarding induced updates'' that starts ``Figure 3(d) shows the dan-
+ger of assuming that the origin of all instabilities is in either on the new or
+on the old path.'' Also, we have Feldmann spelled incorrectly in many places -- it has two `n's.}
+
+\textbf{Lack of ground truth.} By their very nature, interdomain 
+path changes cross multiple administrative domains and thus 
+present a challenge when attempting to determine ground-truth 
+information. In particular, ISPs generally consider routing decisions to 
+be proprietary and confidential information, so even when an 
+algorithm isolates a path change it is difficult to confirm its accuracy. 
+In this work, we obtain ground truth because we can induce path 
+changes at links in the real Internet and located outside our AS.  
+
+\textbf{Lack of control.} Previous work takes a passive approach to 
+observing path changes in the real Internet. As a result, evaluations 
+are strictly limited to path changes that happened to occur during the 
+observation period and in regions of the network made visible to 
+researchers. In this work, we make announcements that 
+allow us to control when and where paths change. This allows us to 
+more generally understand the nature of path changes in response 
+to link unavailability toward prefixes we control thus improving our 
+ability to identify the root cause of path changes that naturally occur 
+toward those prefixes.
+
+\textbf{Limited visibility.} Identifying the root cause of 
+path change requires information about paths before and after a change; 
+thus we would like a continuous feed of routing information from as 
+many vantage points as possible. Until recently, researchers 
+could use only a limited set of available BGP feeds (e.g., RouteViews and 
+RIS) or traceroute data collected from a set of distributed vantage 
+points that support continuous measurement (e.g., PlanetLab). In 
+this work, we augment these datasets with path information gathered 
+from Reverse Traceroute. As we show in Sec.~\ref{}, this additional 
+information allows us to identify the root cause even in the case 
+of an induced path change.
+
+
+%\tbd{DRC: This is redundant-ish with the next subsection but I wanted 
+%to try to reuse at least some this text here.}
+%Feldmann et al.~\cite{feldman} used simulation and passive measurement to
+%isolate the locations of origins for routing instability. Our
+%hypothesis is that we can improve on this work by addressing the
+%following limitations: i) developing a new theory of path-change 
+%origins to include a more complete set of candidate ASes. ii) Incorporating not only passive BGP feeds but
+%also active measurements will give us a more accurate view of paths
+%actually being used; iii) correlation of measurements across large
+%numbers of vantage points made available through revtr will help us
+%better isolate route change origins, even so-called induced updates;
+%iv) using poisoning, we can conduct controlled experiments to better
+%understand how and why paths change in response to link
+%unavailability, potentially revealing previously opaque routing
+%policies; v) existing BGP simulations suffer from a lack of
+%information about route preferences, and the results of our controlled
+%experiments can potentially provide insight on how to better capture
+%this information; vi) path changes ``in the wild'' are subject to noise
+%and misinformation; using our controlled experiments we can further
+%refine path change identification and analysis heuristics.
+
+
+
+

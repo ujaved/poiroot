@@ -1,0 +1,92 @@
+\section{Introduction}
+
+Internet paths change frequently, as links fail or become available and as traffic engineering and policies evolve.
+Although many of these changes are benign, some can seriously disrupt the performance or availability of distant networks and services. Disruptive changes can cause unwelcome changes in flow 
+volumes over ingress links, longer round-trip times, less available bandwidth, and loss of 
+connectivity~\cite{needle, hubble}. For example, Google recently
+found that interdomain routing changes caused more than 40\% of the cases 
+in which clients experienced a latency increase of at least 100ms~\cite{latlong}.
+
+These changes in performance and availability can be costly for service providers.  
+ Amazon found that every additional 100ms of delay in loading a
+web page costs them 1\% of their sales~\cite{linden-amazon}.  Similarly, a Yahoo! study
+found that, when a page took an additional 400ms to load, the latency caused
+5-9\% of users to browse away, rather than letting the page load to
+completion~\cite{yahoo-slow}. Outages at large data centers cost an average of \$5,000 per minute~\cite{ponemon}. Previous work demonstrates that these providers can work with remote networks to resolve problems~\cite{google-whyhigh}, but doing so requires knowing which network to contact. Taken together, these facts 
+suggest that content and service providers 
+would like to quickly understand what caused a path change that impacts their clients' performance.
+
+
+There are other reasons to understand the root cause of a path change. Research has established that Internet routing policies can create unstable configurations~\cite{wedgies, griffin-wilfgong-sheperd} and that some paths experience frequent updates~\cite{labovitz-instability}, making it important to understand the underlying causes of these updates. Networks may want to avoid providers or paths based on a historical understanding of which ISPs cause many changes~\cite{caesar}.  
+Routing policies have a significant impact on performance~\cite{path-inflation}, and understanding the causes of path changes and selections provides some visibility into the policies in use~\cite{iplane-nano}. An understanding of how path changes ripple through the Internet could prove helpful in developing new protocols for routing, for distributing routing updates~\cite{loup}, or for moving toward a more stable Internet.
+
+
+
+The goal of this work is to
+accurately isolate the root cause of a path change within minutes of it happening.
+For our purposes, the root cause is the network or router whose link availability or policy adjustment initially triggered the sequence of route updates leading to the path change in question. 
+Operators can use 
+this information to debug and address performance problems as they occur, and it could eventually drive a system that 
+automatically reroutes traffic to improve performance (similar to LIFEGUARD~\cite{lifeguard}). 
+
+Previous work provided initial inroads towards our goal~\cite{feldman,caesar},
+but opaque policies and poor network visibility limit our ability to understand the root cause of path 
+changes and how they propagate through the Internet. 
+In particular, we identify the 
+following open challenges that these limitations present.
+
+First, interdomain routing policies can interact in complex ways, 
+% because Internet routing is policy-based,  when a path 
+so the network responsible for a change may appear neither on the old path nor the new path~\cite{feldman}. Existing algorithms assume that the change is on the old or new path~\cite{feldman,caesar}, and they cannot properly account for these {\em induced path changes}. 
+Second, because path changes can have cascading effects, 
+ proper root cause identification can require monitoring a potentially large number 
+of paths, many of which are invisible to traditional measurement vantage points such as public BGP 
+feeds and traceroute servers. Third, little to no ground truth information is available to validate 
+assumptions about Internet routing made by root cause identification algorithms. 
+Our results from controlled experiments on real Internet paths demonstrate that these challenges and others cause an existing approach~\cite{feldman} to correctly identify the root cause in only 62\% of path changes.
+
+This paper describes how 
+we address these issues to build a system, which we call
+\ouralgo~\cite{poiroot}, that allows a provider to 
+quickly and accurately isolate the root cause of path changes affecting their clients.
+We derive new constraints on how interdomain path changes propagate and use them to develop an algorithm to accurately isolate the root cause. We then deploy an 
+extensive measurement system and demonstrate that our approach is both precise (\ie produces a small set of suspected root causes) 
+and  accurate (\ie the suspect set always includes 
+the root cause of a path change) for real Internet paths. 
+Our main contributions are as follows.
+
+First, we identify a provable upper bound for 
+the set of paths that must be monitored to identify the root cause of an interdomain path change. 
+Because this set might be prohibitively large for an arbitrary change, we use a simple, yet 
+effective, routing model to refine the set to improve scalability.
+Our bound reduces the average number of ASes we need to monitor to
+perform root cause analysis by up to 65\%. 
+
+Second, we combine existing measurement tools in new 
+ways to acquire path information required to isolate the root cause of a path change. In addition to 
+public BGP feeds, we use BGP prepending on prefixes we control to reveal alternative, less preferred, 
+paths toward our prefixes from distant ASes. We then use data-plane active measurements 
+(traceroutes) toward our prefixes to identify the paths before 
+and after a given path change. In our experiments, we are able to collect the necessary path information 
+within minutes of a path change, allowing our approach to quickly perform root cause analysis.
+
+Third, we develop an algorithm -- based on our model and using our measurements -- that allows us 
+to isolate the root cause of a path change, even with partial routing information. We use 
+controlled experiments on real Internet paths to demonstrate the effectiveness of our approach. In 
+particular, we use BGP announcements to cause path changes for prefixes we control, then validate 
+our algorithm using this ground-truth information. We show that \ouralgo accurately identifies the root cause of a path change \emph{in every 
+case in our experiments}, including induced path changes that previous approaches do not address.
+Finally, we show that path changes in the wild cause significant performance 
+problems, and that \ouralgo is able to identify small suspect sets containing the network responsible for them.
+
+%if you don't like poi root, change \ouralgo to our system
+The rest of 
+the paper is organized as follows. In the following section, we provide background related to the 
+problem of root cause analysis and motivate \ouralgo by describing limitations of previous work. 
+In \S\ref{sec:general}, we develop a general algorithm for identifying the root cause of an 
+arbitrary path change, then use a simple model of BGP path changes to derive the set of paths 
+that must be monitored to identify the root cause. In \S\ref{sec:design}, we describe the design 
+of a measurement system to gather this path information. \S\ref{sec:eval} uses experiments on 
+real Internet paths, simulations, and ``in the wild'' path changes to demonstrate 
+the effectiveness of our approach. We discuss related work in \S\ref{sec:related} and conclude 
+in \S\ref{sec:conclusion}.

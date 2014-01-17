@@ -1,0 +1,263 @@
+%\documentclass{sig-alternate-10pt}
+\documentclass{sig-alternate}
+%\documentclass{ns-article-compact}
+%\documentclass[letterpaper,twocolumn,10pt]{article}
+%\usepackage{usenix,endnotes, graphicx}
+%\usepackage{endnotes}
+\usepackage{graphicx}
+\usepackage{epsfig}
+\usepackage{url, hyperref}
+\usepackage[sort]{cite}
+%\usepackage{setspace}
+%\usepackage{fullpage}
+%\usepackage[small,compact]{titlesec}
+\usepackage{times}
+%\usepackage{pdfsync}
+\usepackage{multirow}
+%\usepackage{subfigure}
+\usepackage{xspace}
+\usepackage{ifpdf}
+\usepackage{algorithmic}
+%\usepackage[noend]{algpseudocode}
+\usepackage{algorithm}
+%\usepackage{algorithmicx}
+\usepackage{float}
+\usepackage{color}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+
+\usepackage{graphics, url, graphicx, amsmath, amsfonts, amssymb,
+  upgreek, epsfig, epstopdf,
+  verbatim}
+ \usepackage{bbding, booktabs}
+% \usepackage{array}
+%\usepackage{rotating,multirow}
+%\usepackage{subfig}
+%\usepackage{subfigure}
+
+\floatstyle{ruled}
+\newfloat{pseudocode}{htbp}{lop}
+\floatname{pseudocode}{Algorithm}
+
+\makeatletter
+\let\c@pseudocode\c@pseudocode
+\makeatother
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{corollary}[theorem]{Corollary}
+\renewenvironment{proof}[1][Proof]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}]}{\end{trivlist}}
+\newenvironment{definition}[1][Definition]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}]}{\end{trivlist}}
+\newenvironment{example}[1][Example]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}]}{\end{trivlist}}
+\newenvironment{remark}[1][Remark]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}]}{\end{trivlist}}
+
+\newcommand{\nparagraph}[1]{{\vspace{0.4em}\noindent{}\textbf{#1}\hspace{0.2em}}}
+\newcommand{\fig}{Fig.}
+\newcommand{\tab}{Tab.}
+\newcommand{\algstr}{Alg.}
+\newcommand{\downstreamC}{\emph{downstream change}}
+\newcommand{\neighborC}{\emph{neighbor path change}}
+\newcommand{\localC}{\emph{local change}}
+
+\newcommand{\old}[1]{[{\color{red}old: #1}]}
+\newcommand{\new}[1]{{\color{blue}#1}}
+
+\renewcommand{\qed}{\nobreak \ifvmode \relax \else
+      \ifdim\lastskip<1.5em \hskip-\lastskip
+      \hskip1.5em plus0em minus0.5em \fi \nobreak
+      \vrule height0.75em width0.5em depth0.25em \fi}
+
+
+%\topmargin      0.0in
+%\pagestyle{empty}
+%% \floatsep 0.1in
+%% \textfloatsep 0.1in
+%% \intextsep 0.05in
+
+\intextsep 3pt plus 2pt minus 4pt      % Space between in-text figures and
+                                        % text.
+
+%% \dblfloatsep 3pt plus 2pt minus 4pt      % Space between in-text figures and
+%%                                         % text.
+
+\textfloatsep 3pt plus 2pt minus 4pt   % Space between main text and floats
+                                        % at top or bottom of page.
+
+%% \floatsep 3pt plus 2pt minus 4pt   % Space between main text and floats
+%%                                         % at top or bottom of page.
+
+%% \dbltextfloatsep 3pt plus 2pt minus 4pt   % Space between main text and floats
+%%                                         % at top or bottom of page.
+
+
+%\{\captionfonts}{\rm}
+%\newcommand{\captionfonts}{\small }
+
+%\setlength{\columnsep}{0.25in}
+%% \setlength{\abovecaptionskip}{0pt}
+%\setlength{\belowcaptionskip}{4pt}
+
+%\makeatletter  % Allow the use of @ in command names
+%\long\def\@makecaption#1#2{%
+%  \vskip 0pt
+%  \sbox\@tempboxa{{\captionfonts #1: #2}}%
+%  \ifdim \wd\@tempboxa >\hsize
+%    {\captionfonts #1: #2\par}
+%    \vskip -2pt
+%  \else
+%    \hbox to\hsize{\hfil\box\@tempboxa\hfil}%
+%  \fi
+%  \vskip\belowcaptionskip}
+%\makeatother   % Cancel the effect of \makeatletter
+
+%% \long\def\@makecaption#1#2{
+%%    \vskip 6pt
+%%    \setbox\@tempboxa\hbox{\textrm{#1: #2}}
+%%    \ifdim \wd\@tempboxa >\hsize % IF longer than one line:
+%%        \textrm{#1: #2}\par               %   THEN set as ordinary paragraph.
+%%        \vskip -2pt
+%%      \else                      %   ELSE  center.
+%%        \hbox to\hsize{\hfil\box\@tempboxa\hfil}\par
+%%    \fi}
+
+%% %
+
+%% \long\def\@makecaption#1#2{
+%%    \vskip 6pt
+%%    \setbox\@tempboxa\hbox{\textrm{#1: #2}}
+%%    \ifdim \wd\@tempboxa >\hsize % IF longer than one line:
+%%        \textrm{#1: #2}\par                %   THEN set as ordinary paragraph.
+%%        \vskip -2pt
+%%      \else                      %   ELSE  center.
+%%        \hbox to\hsize{\hfil\box\@tempboxa\hfil}
+%%    \fi}
+
+\newcommand{\etal}{et al.}
+\renewcommand{\algorithmicrequire}{\textbf{Input:}}
+\renewcommand{\algorithmicensure}{\textbf{Output:}}
+
+\newcommand{\ignore}[1]{}
+%\newcommand{\akxxx}[1]{}
+\newcommand{\akxxx}[1]{{\bf AK: #1}}
+%\newcommand{\smallcaption}[1]{\vspace{-5pt} \caption{{\em \small #1}}}
+%\newcommand{\smallcaption}[1]{\caption{{\em \smallsize #1}}}
+\newcommand{\squishlist}{
+   \begin{list}{$\bullet$}
+    { \setlength{\itemsep}{0pt}      \setlength{\parsep}{3pt}
+      \setlength{\topsep}{3pt}       \setlength{\partopsep}{0pt}
+      \setlength{\leftmargin}{1.5em} \setlength{\labelwidth}{1em}
+      \setlength{\labelsep}{0.5em} } }
+
+\newcommand{\squishlisttwo}{
+   \begin{list}{$\bullet$}
+    { \setlength{\itemsep}{0pt}    \setlength{\parsep}{0pt}
+      \setlength{\topsep}{0pt}     \setlength{\partopsep}{0pt}
+      \setlength{\leftmargin}{2em} \setlength{\labelwidth}{1.5em}
+      \setlength{\labelsep}{0.5em} } }
+
+\newcommand{\squishend}{
+    \end{list}  }
+
+
+\newcommand{\eg}{{\em e.g.},\xspace}
+\newcommand{\ie}{{\em i.e.},\xspace}
+%\newcommand{\nparagraph}[1]{\noindent{\textbf{#1}}}
+
+\newcommand{\feldmann}{{\em NOOR}\xspace}
+\newcommand{\ouralgo}{{\em PoiRoot}\xspace}
+\newcommand{\feldmannbold}{\textbf{ \emph{NOOR}}\xspace}
+\newcommand{\www}{\url{http://revtr.cs.washington.edu}}\xspace
+\newcommand{\revtr}{reverse traceroute}\xspace
+\newcommand{\revping}{{\em one-way ping}\xspace}
+\newcommand{\para}[1]{\smallskip\noindent {\bf #1}}
+\newcommand{\tbd}[1]{[[[{\bf{TBD: #1}}]]]}
+\newcommand{\ekb}[1]{[[[{\bf{ekb: #1}}]]]}
+\newcommand{\drc}[1]{[[[{\bf{drc: #1}}]]]}
+\newcommand{\ic}[1]{[[[{\bf{ic: #1}}]]]}
+%\newcommand{\tbd}[1]{}
+%\newcommand{\tbdtom}[1]{}
+%\newcommand{\tbdnick}[1]{}
+\newcommand{\avoid}[1]{{\sc Avoid\_Problem({#1})}} 
+\newcommand{\propavoid}{{\it Avoidance Property}}
+\newcommand{\propbackup}{{\it Backup Property}}
+\newcommand{\propnotify}{{\it Notification Property}}
+	\ifpdf
+	\setlength{\pdfpageheight}{11in}
+	\setlength{\pdfpagewidth}{8.4in}
+	\else
+	\special{papersize=8.4in,11in}
+	\fi
+
+%\bibliographystyle{plain}
+%\bibliography{rca}
+
+\let\oldthebibliography=\thebibliography
+\let\endoldthebibliography=\endthebibliography
+\renewenvironment{thebibliography}[1]{%
+\begin{oldthebibliography}{#1}%
+\setlength{\itemsep}{-.3ex}%
+}%
+{%
+\end{oldthebibliography}%
+}
+
+\begin{document}
+\conferenceinfo{SIGCOMM'13,} {August 12--16, 2013, Hong Kong, China.} 
+\CopyrightYear{2013} 
+\crdata{978-1-4503-2056-6/13/08} 
+\clubpenalty=10000 
+\widowpenalty = 10000
+
+%\title{Root Cause Analysis for Interdomain Path Changes}
+\title{PoiRoot: Investigating the Root Cause\\of Interdomain Path Changes}
+\numberofauthors{6}
+%\author{Paper ID: 313\\\pageref{lastpage} pages}
+%\author{Umar Javed \\ Qualifying Examination Report \\Advisors: Arvind Krishnamurthy, Tom Anderson}
+\author{
+% You can go ahead and credit any number of authors here,
+% e.g. one 'row of three' or two rows (consisting of one row of three
+% and a second row of one, two or three).
+%
+% The command \alignauthor (no curly braces needed) should
+% precede each author name, affiliation/snail-mail address and
+% e-mail address. Additionally, tag each line of
+% affiliation/address with \affaddr, and tag the
+% e-mail address with \email.
+%
+% 1st. author
+\alignauthor
+Umar Javed\\
+       \affaddr{University of Washington}\\
+       \affaddr{ujaved@cs.washington.edu}\\
+% 2nd. author
+\alignauthor
+Italo Cunha\\
+       \affaddr{Universidade Federal\\de Minas Gerais}\\
+       \affaddr{cunha@dcc.ufmg.br}\\
+\alignauthor
+David R. Choffnes\\
+       \affaddr{University of Washington}\\
+       \affaddr{Northeastern University}\\
+       \affaddr{choffnes@cs.washington.edu}\\
+ %\alignauthor
+ \and
+Ethan Katz-Bassett\\
+       \affaddr{University of Southern California}\\
+       \affaddr{ethan.kb@usc.edu}\\
+\alignauthor
+Thomas Anderson\\
+       \affaddr{University of Washington}\\
+       \affaddr{tom@cs.washington.edu}\\
+\alignauthor
+Arvind Krishnamurthy\\
+       \affaddr{University of Washington}\\
+       \affaddr{arvind@cs.washington.edu}\\
+}
+
+\date{}
+
+\maketitle

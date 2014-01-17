@@ -1,0 +1,64 @@
+\begin{comment}
+To show the incremental benefit of
+each measurement layer in our system we do our analysis starting with just the
+RouteViews feed (RV), followed by RouteViews combined with forward traceroutes
+from PlanetLab nodes (RV+PL), and finally followed by these two feeds combined
+with Reverse Traceroute (RV+PL+REVTR). 
+
+Table \ref{tab:ss-beg} refers to a series of 4500 path changes. It shows the
+percentage of paths for each layer where the candidate set computed at the
+beginning contained the ground truth, i.e., the AS poisoned or unpoisoned.
+Depending on the coverage provided by each measurement feed, some ASes from the
+ideal candidate set, i.e., $N(O(S)) \cup O(N(S))$ might be missing from the
+computed candidate set, including the poiosned/unpoisoned AS.
+
+This is primarily due to the lack of measurements available from certain ASes.
+Although route data taken directly from BGP tables is generally more reliable
+that data plane measurements, the lack of a widely deployed RouteViews-like
+measurement infrastructure means that the scope of monitoring paths to a
+limited set of nodes is quite limited. 
+
+\subsubsection{Root Cause Analysis with Control-Plane Measurements}
+
+We had a total of $33$ RouteViews peers collecting paths toward the muxes. For
+a series of poisonings we observed $741$ path changes, from control plane as
+well as data plane, including $133$ induced path changes. In $401$ cases
+\emph{Javed} was able to identify the correct AS poisoned or unpoisoned in its
+suspect set. This is an accuracy of $54\%$. The algorithm was not able to
+identify any of the induced path changes. The reason for such low accuracy is
+lack of relevant measurements. In the relatively simple cases of non-induced
+path changes where \emph{Javed} was not able to identify the correct
+root-cause, there were no measurement from the poisoned/unpoisoned AS
+before/after the poisoning $95\%$ of the time. Overall $20\%$ of the ASes had
+no measurements available before/after the poisoning.
+
+\subsubsection{Root Cause Analysis with Data-Plane Measurements}
+
+After establishing the insufficiency of BGP feeds, we add traceroute
+measurements from our set of distributed PlanetLab vantage points. This
+drastically improves the accuracy of \emph{Javed} as the relevant measurements
+are now available when needed.  {\color{blue}{say something about sources of
+inaccuracies and how you deal with it: a) routers occasionally not responding.
+b) the inaccuracy of ip2as translation.}} Given a choice between a RouteViews
+path and a traceroute from AS $X$, the RV path is preferred over the traceroute
+since control-plane reflects the routing state more accurately then data-plane.
+
+We had a total of  approximately $200$ globally distributed PlanteLab vantage
+points collecting trace route paths toward the muxes in addition to the. For the
+same set of path changes as before, \emph{Javed}'s accuracy goes up to $84\%$.
+The induced path change detection accuracy is $20\%$. 
+
+(1) How often is it exact, close, or wrong? \
+
+(2) For those that are not exact, classify the reasons why it is wrong. \
+
+(3) What is the number of ASes that we need to monitor to capture enough
+information for pinpointing the AS responsible for path changes? How does this
+change as you increase the number of ASNs from which we can do root cause
+analysis?\
+
+(4) What fraction of the time is each dataset used to identify the root cause?
+Is it mostly RV, traceroutes, revtr? In other words, what is the marginal
+utility of each dataset? How useful was the study using exhaustive prepending
+and poisoning?
+\end{comment}
